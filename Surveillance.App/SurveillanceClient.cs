@@ -13,7 +13,7 @@ using Surveillance.Steam.Response;
 
 namespace Surveillance.App
 {
-    public class SurveillanceClient
+    public class SurveillanceClient : IApplication
     {
         private const uint DeadByDaylightAppId = 381210;
         
@@ -42,7 +42,7 @@ namespace Surveillance.App
             try
             {
                 foreach (var richPresence in _richPresences)
-                    richPresence.Init();
+                    richPresence.Init(this);
             }
             catch (Exception e)
             {
@@ -98,19 +98,22 @@ namespace Surveillance.App
                 var apiResponseContent = apiResponse.Content;
                 var playerStats = apiResponseContent.PlayerStats;
                 
-                Logger.Info("Received stats for player {0} on game {1}", playerStats.SteamId, playerStats.GameName);
+                Logger.Info("Received stats of player {0} for {1}", playerStats.SteamId, playerStats.GameName);
 
                 var gameStats = playerStats.Stats;
                 foreach (var statModel in gameStats)
                     Logger.Debug("{0} = {1}", statModel.Name, statModel.Value);
 
-                await Task.Delay(apiResponse.Expires.Subtract(DateTime.UtcNow));
+                var utcNow = DateTimeOffset.UtcNow;
+                var offset = apiResponse.Expires.Subtract(utcNow);
+                Logger.Trace("Next steam request in {0} (now: {1}, expires: {2})", offset, utcNow, apiResponse.Expires);
+                await Task.Delay(offset);
             }
             
-            
+            SteamApi.Reset();
         }
 
-        private Uri BuildUri()
+        private static Uri BuildUri()
         {
             var builder = new UriBuilder("https://api.steampowered.com/ISteamUserStats/GetUserStatsForGame/v2/");
 
@@ -118,9 +121,14 @@ namespace Surveillance.App
             queryCollection["key"] = Environment.GetEnvironmentVariable("STEAM_KEY") ?? throw new ArgumentException("Missing STEAM_KEY environment variable");
             queryCollection["appid"] = DeadByDaylightAppId.ToString(NumberFormatInfo.InvariantInfo);
             queryCollection["steamid"] = "76561198135169007";
-            builder.Query = queryCollection.ToString();
+            builder.Query = queryCollection.ToString() ?? throw new InvalidOperationException();
 
             return builder.Uri;
+        }
+
+        public void Close()
+        {
+            _running = false;
         }
     }
 }

@@ -6,7 +6,7 @@ namespace Surveillance.RichPresence
     {
         int UpdateRate { get; }
 
-        void Init();
+        void Init(IApplication application);
         void PollEvents();
 
         void UpdateActivity(string character, string item, string details);
