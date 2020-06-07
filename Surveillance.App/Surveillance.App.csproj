@@ -15,4 +15,8 @@
       <PackageReference Include="NLog" Version="4.7.2" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\Surveillance.RichPresence\Surveillance.RichPresence.csproj" />
+    </ItemGroup>
+
 </Project>
