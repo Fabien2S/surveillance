@@ -1,4 +1,5 @@
 ﻿using System;
+using Surveillance.App;
 
 namespace Surveillance.RichPresence
 {
@@ -6,9 +7,9 @@ namespace Surveillance.RichPresence
     {
         int UpdateRate { get; }
 
-        void Init(IApplication application);
+        void Init(ISurveillanceApp app);
         void PollEvents();
 
-        void UpdateActivity(string character, string item, string details);
+        void UpdateActivity(GameState gameState);
     }
 }

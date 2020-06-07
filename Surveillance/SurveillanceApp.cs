@@ -5,15 +5,15 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using NLog;
+using Surveillance.App;
 using Surveillance.App.Json;
-using Surveillance.App.Models;
 using Surveillance.RichPresence;
 using Surveillance.Steam;
 using Surveillance.Steam.Response;
 
-namespace Surveillance.App
+namespace Surveillance
 {
-    public class SurveillanceClient : IApplication
+    public class SurveillanceApp : ISurveillanceApp
     {
         private const uint DeadByDaylightAppId = 381210;
         
@@ -25,9 +25,9 @@ namespace Surveillance.App
         private bool _running;
 
         private bool _dirty;
-        private GameStateModel _gameState;
+        private GameState _gameState;
 
-        public SurveillanceClient(params IRichPresence[] richPresences)
+        public SurveillanceApp(params IRichPresence[] richPresences)
         {
             _richPresences = richPresences;
             _updateRate = richPresences.Select(rp => rp.UpdateRate).Max();
@@ -52,6 +52,17 @@ namespace Surveillance.App
             }
             
             RequestStatistics();
+
+            foreach (var richPresence in _richPresences)
+            {
+                richPresence.UpdateActivity(new GameState
+                {
+                    Action = "test",
+                    ActionIcon = "app",
+                    Character = "app",
+                    CharacterIcon = "app"
+                });
+            }
             
             try
             {
@@ -61,13 +72,7 @@ namespace Surveillance.App
                     {
                         richPresence.PollEvents();
                         if (_dirty)
-                        {
-                            richPresence.UpdateActivity(
-                                _gameState.Character,
-                                _gameState.Item,
-                                _gameState.Details
-                            );
-                        }
+                            richPresence.UpdateActivity(_gameState);
                     }
 
                     _dirty = false;

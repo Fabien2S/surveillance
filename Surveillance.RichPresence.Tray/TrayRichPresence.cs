@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.Threading;
 using System.Windows.Forms;
+using Surveillance.App;
 
 namespace Surveillance.RichPresence.Tray
 {
@@ -9,12 +10,13 @@ namespace Surveillance.RichPresence.Tray
     {
         public int UpdateRate => 0;
 
-        private IApplication _application;
+        private ISurveillanceApp _app;
         private TrayIcon _icon;
 
-        public void Init(IApplication application)
+
+        public void Init(ISurveillanceApp app)
         {
-            _application = application;
+            _app = app;
 
             new Thread(Run)
             {
@@ -34,23 +36,23 @@ namespace Surveillance.RichPresence.Tray
             _icon.SetText("Surveillance");
             _icon.SetIcon("app");
             _icon.AddItem("Close", HandleCloseButton);
-            
+
             Application.Run();
         }
 
         private void HandleCloseButton(object sender, EventArgs e)
         {
-            _application.Close();
+            _app.Close();
         }
 
         public void PollEvents()
         {
         }
 
-        public void UpdateActivity(string character, string item, string details)
+        public void UpdateActivity(GameState gameState)
         {
-            _icon.SetText($"{character} - {item}");
-            _icon.SetIcon(details);
+            _icon.SetText($"{gameState.Character} - {gameState.Action}");
+            _icon.SetIcon(gameState.CharacterIcon);
         }
 
         public void Dispose()

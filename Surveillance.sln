@@ -1,12 +1,18 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Surveillance.App", "Surveillance.App\Surveillance.App.csproj", "{D8F4BA5A-70C1-4132-B3C2-F8E440D2E64F}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Surveillance.RichPresence", "Surveillance.RichPresence\Surveillance.RichPresence.csproj", "{86A2429D-46C6-4C2C-8389-DCF5E8C75A94}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Surveillance.Steam", "Surveillance.Steam\Surveillance.Steam.csproj", "{4A887B2B-F54E-47A2-9A8E-BA69882609BB}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Surveillance.RichPresence.Tray", "Surveillance.RichPresence.Tray\Surveillance.RichPresence.Tray.csproj", "{8D376F60-4A42-46FA-BEAB-FC409211487C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Surveillance.RichPresence.Discord", "Surveillance.RichPresence.Discord\Surveillance.RichPresence.Discord.csproj", "{25A2D25F-4AEC-492B-AA4B-AB8B48B7E732}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DiscordGameSDK", "DiscordGameSDK\DiscordGameSDK.csproj", "{FADD8675-A705-48DB-90B7-1F8248F97AC6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Surveillance", "Surveillance\Surveillance.csproj", "{9D50C1A5-D2CE-4367-9288-B55D824199C4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Surveillance.App", "Surveillance.App\Surveillance.App.csproj", "{7D6037D8-35E9-41EB-9C93-C2A5E5FC385D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -14,10 +20,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{D8F4BA5A-70C1-4132-B3C2-F8E440D2E64F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D8F4BA5A-70C1-4132-B3C2-F8E440D2E64F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D8F4BA5A-70C1-4132-B3C2-F8E440D2E64F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D8F4BA5A-70C1-4132-B3C2-F8E440D2E64F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{86A2429D-46C6-4C2C-8389-DCF5E8C75A94}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{86A2429D-46C6-4C2C-8389-DCF5E8C75A94}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{86A2429D-46C6-4C2C-8389-DCF5E8C75A94}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -30,5 +32,21 @@ Global
 		{8D376F60-4A42-46FA-BEAB-FC409211487C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8D376F60-4A42-46FA-BEAB-FC409211487C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8D376F60-4A42-46FA-BEAB-FC409211487C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{25A2D25F-4AEC-492B-AA4B-AB8B48B7E732}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{25A2D25F-4AEC-492B-AA4B-AB8B48B7E732}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{25A2D25F-4AEC-492B-AA4B-AB8B48B7E732}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{25A2D25F-4AEC-492B-AA4B-AB8B48B7E732}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FADD8675-A705-48DB-90B7-1F8248F97AC6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FADD8675-A705-48DB-90B7-1F8248F97AC6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FADD8675-A705-48DB-90B7-1F8248F97AC6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FADD8675-A705-48DB-90B7-1F8248F97AC6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9D50C1A5-D2CE-4367-9288-B55D824199C4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9D50C1A5-D2CE-4367-9288-B55D824199C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9D50C1A5-D2CE-4367-9288-B55D824199C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9D50C1A5-D2CE-4367-9288-B55D824199C4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7D6037D8-35E9-41EB-9C93-C2A5E5FC385D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7D6037D8-35E9-41EB-9C93-C2A5E5FC385D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7D6037D8-35E9-41EB-9C93-C2A5E5FC385D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7D6037D8-35E9-41EB-9C93-C2A5E5FC385D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
