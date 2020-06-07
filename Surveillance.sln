@@ -6,6 +6,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Surveillance.RichPresence",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Surveillance.Steam", "Surveillance.Steam\Surveillance.Steam.csproj", "{4A887B2B-F54E-47A2-9A8E-BA69882609BB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Surveillance.RichPresence.Tray", "Surveillance.RichPresence.Tray\Surveillance.RichPresence.Tray.csproj", "{8D376F60-4A42-46FA-BEAB-FC409211487C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{4A887B2B-F54E-47A2-9A8E-BA69882609BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4A887B2B-F54E-47A2-9A8E-BA69882609BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4A887B2B-F54E-47A2-9A8E-BA69882609BB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8D376F60-4A42-46FA-BEAB-FC409211487C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8D376F60-4A42-46FA-BEAB-FC409211487C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8D376F60-4A42-46FA-BEAB-FC409211487C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8D376F60-4A42-46FA-BEAB-FC409211487C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

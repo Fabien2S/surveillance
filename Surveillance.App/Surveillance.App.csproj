@@ -16,6 +16,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Surveillance.RichPresence.Tray\Surveillance.RichPresence.Tray.csproj" />
       <ProjectReference Include="..\Surveillance.RichPresence\Surveillance.RichPresence.csproj" />
       <ProjectReference Include="..\Surveillance.Steam\Surveillance.Steam.csproj" />
     </ItemGroup>
