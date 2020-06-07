@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Surveillance.App", "Surveil
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Surveillance.RichPresence", "Surveillance.RichPresence\Surveillance.RichPresence.csproj", "{86A2429D-46C6-4C2C-8389-DCF5E8C75A94}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Surveillance.Steam", "Surveillance.Steam\Surveillance.Steam.csproj", "{4A887B2B-F54E-47A2-9A8E-BA69882609BB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{86A2429D-46C6-4C2C-8389-DCF5E8C75A94}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{86A2429D-46C6-4C2C-8389-DCF5E8C75A94}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{86A2429D-46C6-4C2C-8389-DCF5E8C75A94}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4A887B2B-F54E-47A2-9A8E-BA69882609BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4A887B2B-F54E-47A2-9A8E-BA69882609BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4A887B2B-F54E-47A2-9A8E-BA69882609BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4A887B2B-F54E-47A2-9A8E-BA69882609BB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

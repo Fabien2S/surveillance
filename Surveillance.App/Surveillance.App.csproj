@@ -17,6 +17,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Surveillance.RichPresence\Surveillance.RichPresence.csproj" />
+      <ProjectReference Include="..\Surveillance.Steam\Surveillance.Steam.csproj" />
     </ItemGroup>
 
 </Project>
