@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Surveillance.App;
+using Surveillance.App.RichPresence;
 
 namespace Surveillance.RichPresence.Tray
 {
@@ -11,11 +12,11 @@ namespace Surveillance.RichPresence.Tray
     {
         public int UpdateRate => 0;
 
-        private ISurveillanceApp _app;
+        private SurveillanceApp _app;
         private TrayIcon _icon;
 
 
-        public Task Init(ISurveillanceApp app)
+        public Task Init(SurveillanceApp app)
         {
             _app = app;
 

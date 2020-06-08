@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Surveillance.App;
 
-namespace Surveillance.RichPresence
+namespace Surveillance.App.RichPresence
 {
     public interface IRichPresence : IDisposable
     {
         int UpdateRate { get; }
 
-        Task Init(ISurveillanceApp app);
+        Task Init(SurveillanceApp app);
         void PollEvents();
 
         void UpdateGameState(GameState gameState);

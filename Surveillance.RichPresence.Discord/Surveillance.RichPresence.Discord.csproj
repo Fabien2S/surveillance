@@ -6,7 +6,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\DiscordGameSDK\DiscordGameSDK.csproj" />
-      <ProjectReference Include="..\Surveillance.RichPresence\Surveillance.RichPresence.csproj" />
+      <ProjectReference Include="..\Surveillance.App\Surveillance.App.csproj" />
     </ItemGroup>
 
 </Project>

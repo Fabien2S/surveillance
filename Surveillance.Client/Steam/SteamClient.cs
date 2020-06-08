@@ -2,7 +2,7 @@ using System;
 using System.ComponentModel;
 using Microsoft.Win32;
 
-namespace Surveillance.Steam
+namespace Surveillance.Client.Steam
 {
     public static class SteamClient
     {

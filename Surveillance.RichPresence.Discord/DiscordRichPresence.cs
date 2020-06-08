@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using DiscordGameSDK;
 using Surveillance.App;
+using Surveillance.App.RichPresence;
 
 namespace Surveillance.RichPresence.Discord
 {
@@ -13,7 +14,7 @@ namespace Surveillance.RichPresence.Discord
 
         private DiscordGameSDK.Discord _discord;
 
-        public Task Init(ISurveillanceApp app)
+        public Task Init(SurveillanceApp app)
         {
             _discord = new DiscordGameSDK.Discord(ClientId, (ulong) CreateFlags.NoRequireDiscord);
 

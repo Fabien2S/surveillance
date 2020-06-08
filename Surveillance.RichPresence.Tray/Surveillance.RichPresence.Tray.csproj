@@ -10,11 +10,11 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Surveillance.RichPresence\Surveillance.RichPresence.csproj" />
+      <Folder Include="Resources\character\killer" />
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Resources\character\killer" />
+      <ProjectReference Include="..\Surveillance.App\Surveillance.App.csproj" />
     </ItemGroup>
 
 </Project>
