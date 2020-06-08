@@ -20,7 +20,7 @@ namespace Surveillance.Client
             if (!SteamClient.IsGame(SurveillanceApp.DeadByDaylightAppId, SteamClient.AppState.Installed))
                 throw new InvalidOperationException("Dead by Daylight is not installed");
 
-            var type = typeof(SurveillanceApp);
+            var type = typeof(Program);
             var path = type.Namespace + ".Resources.GameStates.json";
             var resourceStream = type.Assembly.GetManifestResourceStream(path);
             var gameStates = JsonSerializer.DeserializeAsync<GameState[]>(resourceStream, DefaultJsonOptions.Instance).Result;
