@@ -31,6 +31,7 @@ namespace Surveillance
         private bool _dirty;
         private GameState _gameState;
         private SteamGameStatModel[] _gameStats;
+        private ulong _activeUser;
 
         public SurveillanceApp(GameState[] gameStates, IRichPresence[] richPresences)
         {
@@ -44,6 +45,16 @@ namespace Surveillance
             Logger.Info("Starting Surveillance");
 
             _running = true;
+            
+            if (!SteamClient.IsLaunched)
+                throw new InvalidOperationException("Steam is not running");
+            if (!SteamClient.IsConnected)
+                throw new InvalidOperationException("Steam is not connected");
+            if (!SteamClient.IsGame(DeadByDaylightAppId, SteamClient.AppState.Installed))
+                throw new InvalidOperationException("Dead by Daylight is not installed");
+
+            _activeUser = SteamClient.ActiveUser;
+            Logger.Debug("[Steam] Logged in as {0}", _activeUser);
 
             RunRichPresenceLoop();
             RunStatsRequestLoop();
@@ -181,7 +192,7 @@ namespace Surveillance
             _gameState = gameState;
         }
 
-        private static Uri BuildUri()
+        private Uri BuildUri()
         {
             var builder = new UriBuilder("https://api.steampowered.com/ISteamUserStats/GetUserStatsForGame/v2/");
 
@@ -189,7 +200,7 @@ namespace Surveillance
             queryCollection["key"] = Environment.GetEnvironmentVariable("STEAM_KEY") ??
                                      throw new ArgumentException("Missing STEAM_KEY environment variable");
             queryCollection["appid"] = DeadByDaylightAppId.ToString(NumberFormatInfo.InvariantInfo);
-            queryCollection["steamid"] = "76561198135169007";
+            queryCollection["steamid"] = _activeUser.ToString(NumberFormatInfo.InvariantInfo);
             builder.Query = queryCollection.ToString() ?? throw new InvalidOperationException();
 
             return builder.Uri;
