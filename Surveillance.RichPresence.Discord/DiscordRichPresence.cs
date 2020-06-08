@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using DiscordGameSDK;
 using Surveillance.App;
 using Surveillance.App.RichPresence;
@@ -45,21 +44,18 @@ namespace Surveillance.RichPresence.Discord
             activityManager.UpdateActivity(new Activity
             {
                 Instance = true,
-                Name = "Surveillance",
-                Details = "Playing As " + gameCharacter.Type,
-                State = gameState.Details,
+                Name = "Dead by Daylight",
+                Details = gameState.CharacterString,
+                State = gameState.ActionString,
                 Type = ActivityType.Watching,
                 Assets = new ActivityAssets
                 {
-                    LargeText = gameCharacter.Name,
+                    LargeText = gameCharacter.DisplayName,
                     LargeImage = "character_" + gameCharacter.Type + "_" + gameCharacter.Name,
-                    SmallText = gameAction.Name,
+                    SmallText = gameAction.DisplayName,
                     SmallImage = "action_" + gameAction.Type + "_" + gameAction.Name
                 }
-            }, result =>
-            {
-                Console.WriteLine(result);
-            });
+            }, result => {});
         }
 
         public void Dispose()

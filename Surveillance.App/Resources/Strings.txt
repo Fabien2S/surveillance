@@ -1,0 +1,18 @@
+﻿character.info.playing_as=Playing as {0}
+
+character.killer.trapper=The Trapper
+character.killer.wraith=The Wraith
+character.killer.hillbilly=The Hillbilly
+character.killer.nurse=The Nurse
+
+action.power.bear_trap=Bear Trap
+action.power.bear_trap.details={0}
+
+action.power.wailing_bell=Wailing Bell
+action.power.wailing_bell.details={0} surprise attacks
+
+action.power.chainsaw=Chainsaw
+action.power.chainsaw.details={0} survivors chainsawed
+
+action.power.spencer_last_breath=Spencer's Last Breath
+action.power.spencer_last_breath.details={0} blink attacks

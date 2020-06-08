@@ -1,7 +1,9 @@
 ﻿using System;
-using System.Diagnostics;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Resources;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
@@ -21,8 +23,11 @@ namespace Surveillance.App
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        private readonly ulong _steamId;
-        private readonly GameState[] _gameStates;
+        
+        private readonly Dictionary<string, GameState> _gameStates = new Dictionary<string, GameState>();
+        private readonly Dictionary<string, double> _stats = new Dictionary<string, double>();
+        
+        private readonly ResourceManager _resourceManager;
         private readonly IRichPresence[] _richPresences;
         private readonly int _updateRate;
 
@@ -30,12 +35,10 @@ namespace Surveillance.App
 
         private bool _dirty;
         private GameState _gameState;
-        private SteamGameStatModel[] _gameStats;
 
-        public SurveillanceApp(ulong steamId, GameState[] gameStates, IRichPresence[] richPresences)
+        public SurveillanceApp(IRichPresence[] richPresences)
         {
-            _steamId = steamId;
-            _gameStates = gameStates;
+            _resourceManager = new ResourceManager("Surveillance.App.Resources.Strings", typeof(SurveillanceApp).Assembly);
             _richPresences = richPresences;
             _updateRate = richPresences.Select(rp => rp.UpdateRate).Max();
         }
@@ -46,6 +49,7 @@ namespace Surveillance.App
 
             _running = true;
 
+            LoadGameStates();
             RunRichPresenceLoop();
             RunStatsRequestLoop();
 
@@ -65,7 +69,21 @@ namespace Surveillance.App
 
             Logger.Info("Shutting down");
         }
-
+        
+        private async void LoadGameStates()
+        {
+            _stats.Clear();
+            
+            var type = typeof(SurveillanceApp);
+            var path = type.Namespace + ".Resources.GameStates.json";
+            var resourceStream = type.Assembly.GetManifestResourceStream(path);
+            var gameStates = await JsonSerializer.DeserializeAsync<GameState[]>(resourceStream, DefaultJsonOptions.Instance);
+            
+            foreach (var gameState in gameStates)
+            foreach (var trigger in gameState.Triggers)
+                _gameStates[trigger] = gameState;
+        }
+        
         private async void RunRichPresenceLoop()
         {
             foreach (var richPresence in _richPresences)
@@ -75,14 +93,14 @@ namespace Surveillance.App
             {
                 if (!_dirty)
                     continue;
-                
+
                 foreach (var richPresence in _richPresences)
                     richPresence.UpdateGameState(_gameState);
 
                 _dirty = false;
                 await Task.Delay(_updateRate);
             }
-            
+
             foreach (var richPresence in _richPresences)
                 richPresence.Dispose();
         }
@@ -96,23 +114,13 @@ namespace Surveillance.App
 
             while (_running)
             {
-                var apiResponse =
-                    await SteamApi.Request<SteamUserStatsForGameResponse>(requestUri, DefaultJsonOptions.Instance);
+                var apiResponse = await SteamApi.Request<SteamUserStatsForGameResponse>(requestUri, DefaultJsonOptions.Instance);
                 var apiResponseContent = apiResponse.Content;
                 var playerStats = apiResponseContent.PlayerStats;
 
                 Logger.Info("Received stats of player {0} for {1}", playerStats.SteamId, playerStats.GameName);
 
                 UpdateGameState(playerStats.Stats);
-
-                var res = new SteamGameStatModel[_gameStats.Length];
-                Array.Copy(_gameStats, res, _gameStats.Length);
-                res[22] = new SteamGameStatModel
-                {
-                    Name = "DBD_UncloakAttack",
-                    Value = 128755
-                };
-                UpdateGameState(res);
 
                 var utcNow = DateTimeOffset.UtcNow;
                 var offset = apiResponse.Expires.Subtract(utcNow);
@@ -123,77 +131,63 @@ namespace Surveillance.App
             SteamApi.Reset();
         }
 
-        private void UpdateGameState(SteamGameStatModel[] stats)
+        private void UpdateGameState(IEnumerable<SteamGameStatModel> stats)
         {
-            if (_gameStats == null)
+            foreach (var stat in stats)
             {
-                for (var i = 0; i < stats.Length; i++)
+                var statName = stat.Name;
+                if (!_gameStates.TryGetValue(statName, out var gameState))
+                    continue;
+
+                if (_stats.TryGetValue(statName, out var oldStat))
                 {
-                    var stat = stats[i];
-                    Logger.Debug("[{0}] {1} = {2}", i, stat.Name, stat.Value);
+                    if (Math.Abs(oldStat - stat.Value) <= 0)
+                        continue;
+
+                    SetGameState(gameState);
+                    _stats[statName] = stat.Value;
                 }
-
-                Logger.Debug("Ignoring first game stats response");
-                _gameStats = stats;
-                return;
+                else
+                    _stats[statName] = stat.Value;
             }
-
-            for (var i = 0; i < stats.Length; i++)
-            {
-                var stat = stats[i];
-                var oldStat = _gameStats[i];
-                Debug.Assert(
-                    stat.Name.Equals(oldStat.Name, StringComparison.Ordinal),
-                    "stat[i].Name != oldStat[i].Name"
-                );
-
-                if (Math.Abs(stat.Value - oldStat.Value) <= 0)
-                    continue;
-
-                Logger.Trace("Checking stat {0}", stat.Name);
-                if (!FindGameState(stat.Name, out var definition))
-                    continue;
-
-                SetGameState(definition);
-                break;
-            }
-
-            _gameStats = stats;
-        }
-
-        private bool FindGameState(string name, out GameState gameState)
-        {
-            foreach (var state in _gameStates)
-            {
-                if (!state.Triggers.Any(trigger => trigger.Equals(name, StringComparison.Ordinal)))
-                    continue;
-
-                gameState = state;
-                return true;
-            }
-
-            gameState = default;
-            return false;
         }
 
         private void SetGameState(GameState gameState)
         {
             _dirty = true;
             _gameState = gameState;
+
+            var gameCharacter = gameState.Character;
+            gameCharacter.DisplayName = I18N("character." + gameCharacter.Type + "." + gameCharacter.Name);
+            _gameState.Character = gameCharacter;
+            
+            _gameState.CharacterString = I18N("character.info.playing_as", gameCharacter.DisplayName);
+
+            var gameAction = gameState.Action;
+            gameAction.DisplayName = I18N("action." + gameAction.Type + "." + gameAction.Name);
+            _gameState.Action = gameAction;
+
+            var values = gameState.Triggers.Select(trigger => _stats[trigger]).Cast<object>().ToArray();
+            _gameState.ActionString = I18N("action." + gameAction.Type + "." + gameAction.Name + ".details", values);
         }
 
-        private Uri BuildUri()
+        private static Uri BuildUri()
         {
             var builder = new UriBuilder("https://api.steampowered.com/ISteamUserStats/GetUserStatsForGame/v2/");
 
             var queryCollection = HttpUtility.ParseQueryString(builder.Query);
-            queryCollection["key"] = Environment.GetEnvironmentVariable("STEAM_KEY") ??
-                                     throw new ArgumentException("Missing STEAM_KEY environment variable");
+            queryCollection["key"] = Environment.GetEnvironmentVariable("STEAM_KEY") ?? throw new ArgumentException("Missing STEAM_KEY");
             queryCollection["appid"] = DeadByDaylightAppId.ToString(NumberFormatInfo.InvariantInfo);
-            queryCollection["steamid"] = _steamId.ToString(NumberFormatInfo.InvariantInfo);
+            queryCollection["steamid"] = Environment.GetEnvironmentVariable("STEAM_ID") ?? throw new ArgumentException("Missing STEAM_ID");
             builder.Query = queryCollection.ToString() ?? throw new InvalidOperationException();
 
             return builder.Uri;
+        }
+
+        private string I18N(string key, params object[] args)
+        {
+            var str = _resourceManager.GetString(key) ?? throw new KeyNotFoundException("Missing " + key);
+            return args.Length == 0 ? str : string.Format(str, args);
         }
 
         public void Close()

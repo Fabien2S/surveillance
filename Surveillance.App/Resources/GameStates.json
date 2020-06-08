@@ -2,11 +2,13 @@
   {
     "character": {
       "type": "killer",
-      "name": "trapper"
+      "name": "trapper",
+      "displayName": "The Trapper"
     },
     "action": {
       "type": "power",
-      "name": "bear_trap"
+      "name": "bear_trap",
+      "displayName": "Bear Trap"
     },
     "triggers": [
       "DBD_TrapPickup"
@@ -15,13 +17,14 @@
   {
     "character": {
       "type": "killer",
-      "name": "wraith"
+      "name": "wraith",
+      "displayName": "The Wraith"
     },
     "action": {
       "type": "power",
-      "name": "wailing_bell"
+      "name": "wailing_bell",
+      "displayName": "Wailing Bell"
     },
-    "details": "{DBD_UncloakAttack} surprise attacks",
     "triggers": [
       "DBD_UncloakAttack"
     ]
@@ -29,13 +32,14 @@
   {
     "character": {
       "type": "killer",
-      "name": "hillbilly"
+      "name": "hillbilly",
+      "displayName": "The Hillbilly"
     },
     "action": {
       "type": "power",
-      "name": "chainsaw"
+      "name": "chainsaw",
+      "displayName": "Chainsaw"
     },
-    "details": "{DBD_ChainsawHit} survivors chainsawed",
     "triggers": [
       "DBD_ChainsawHit"
     ]
@@ -43,13 +47,14 @@
   {
     "character": {
       "type": "killer",
-      "name": "nurse"
+      "name": "nurse",
+      "displayName": "The Nurse"
     },
     "action": {
       "type": "power",
-      "name": "spencer_last_breath"
+      "name": "spencer_last_breath",
+      "displayName": "Spencer's Last Breath"
     },
-    "details": "{DBD_SlasherChainAttack} blink attacks",
     "triggers": [
       "DBD_SlasherChainAttack",
       "DBD_SlasherChainInterruptAfter3"

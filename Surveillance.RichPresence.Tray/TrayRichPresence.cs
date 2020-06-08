@@ -55,9 +55,9 @@ namespace Surveillance.RichPresence.Tray
 
         public void UpdateGameState(GameState gameState)
         {
+            _icon.SetText(gameState.CharacterString + " (" + gameState.ActionString + ")");
+            
             var gameCharacter = gameState.Character;
-            var gameAction = gameState.Action;
-            _icon.SetText(gameCharacter.Name + " (" + gameAction.Name + ")");
             _icon.SetIcon("character." + gameCharacter.Type + "." + gameCharacter.Name);
         }
 
