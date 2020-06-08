@@ -250,5 +250,26 @@
     "triggers": [
       "DBD_Chapter15_Slasher_Stat1"
     ]
+  },
+  {
+    "character": {
+      "type": "survivor",
+      "name": "unknown"
+    },
+    "action": {
+      "type": "status",
+      "name": "surviving"
+    },
+    "triggers": [
+      "DBD_GeneratorPct_float",
+      "DBD_HealPct_float",
+      "DBD_SkillCheckSuccess",
+      "DBD_UnhookOrHeal",
+      "DBD_UnhookOrHeal_PostExit",
+      "DBD_HitNearHook",
+      "DBD_DLC3_Camper_Stat1",
+      "DBD_DLC7_Camper_Stat1",
+      "DBD_DLC7_Camper_Stat2"
+    ]
   }
 ]
