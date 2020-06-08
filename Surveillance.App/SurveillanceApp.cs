@@ -160,15 +160,14 @@ namespace Surveillance.App
             var gameCharacter = gameState.Character;
             gameCharacter.DisplayName = I18N("character." + gameCharacter.Type + "." + gameCharacter.Name);
             _gameState.Character = gameCharacter;
-            
-            _gameState.CharacterString = I18N("character.info.playing_as", gameCharacter.DisplayName);
 
             var gameAction = gameState.Action;
             gameAction.DisplayName = I18N("action." + gameAction.Type + "." + gameAction.Name);
             _gameState.Action = gameAction;
-
+            
             var values = gameState.Triggers.Select(trigger => _stats[trigger]).Cast<object>().ToArray();
-            _gameState.ActionString = I18N("action." + gameAction.Type + "." + gameAction.Name + ".details", values);
+            _gameState.Details = I18N("action." + gameAction.Type + "." + gameAction.Name + ".details", values);
+            _gameState.State = I18N("character.state." + gameCharacter.Type);
         }
 
         private static Uri BuildUri()
