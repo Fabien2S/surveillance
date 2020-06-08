@@ -133,6 +133,7 @@ namespace Surveillance.App
 
         private void UpdateGameState(IEnumerable<SteamGameStatModel> stats)
         {
+            GameState? newState = null;
             foreach (var stat in stats)
             {
                 var statName = stat.Name;
@@ -144,17 +145,19 @@ namespace Surveillance.App
                     if (Math.Abs(oldStat - stat.Value) <= 0)
                         continue;
 
-                    SetGameState(gameState);
+                    newState = gameState;
                     _stats[statName] = stat.Value;
                 }
                 else
                     _stats[statName] = stat.Value;
             }
+            
+            if(newState.HasValue)
+                SetGameState(newState.Value);
         }
 
         private void SetGameState(GameState gameState)
         {
-            _dirty = true;
             _gameState = gameState;
 
             var gameCharacter = gameState.Character;
@@ -168,6 +171,8 @@ namespace Surveillance.App
             var values = gameState.Triggers.Select(trigger => _stats[trigger]).Cast<object>().ToArray();
             _gameState.Details = I18N("action." + gameAction.Type + "." + gameAction.Name + ".details", values);
             _gameState.State = I18N("character.state." + gameCharacter.Type);
+            
+            _dirty = true;
         }
 
         private static Uri BuildUri()

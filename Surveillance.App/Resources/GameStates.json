@@ -2,13 +2,11 @@
   {
     "character": {
       "type": "killer",
-      "name": "trapper",
-      "displayName": "The Trapper"
+      "name": "trapper"
     },
     "action": {
       "type": "power",
-      "name": "bear_trap",
-      "displayName": "Bear Trap"
+      "name": "bear_trap"
     },
     "triggers": [
       "DBD_TrapPickup"
@@ -17,13 +15,11 @@
   {
     "character": {
       "type": "killer",
-      "name": "wraith",
-      "displayName": "The Wraith"
+      "name": "wraith"
     },
     "action": {
       "type": "power",
-      "name": "wailing_bell",
-      "displayName": "Wailing Bell"
+      "name": "wailing_bell"
     },
     "triggers": [
       "DBD_UncloakAttack"
@@ -32,13 +28,11 @@
   {
     "character": {
       "type": "killer",
-      "name": "hillbilly",
-      "displayName": "The Hillbilly"
+      "name": "hillbilly"
     },
     "action": {
       "type": "power",
-      "name": "chainsaw",
-      "displayName": "Chainsaw"
+      "name": "chainsaw"
     },
     "triggers": [
       "DBD_ChainsawHit"
@@ -47,13 +41,11 @@
   {
     "character": {
       "type": "killer",
-      "name": "nurse",
-      "displayName": "The Nurse"
+      "name": "nurse"
     },
     "action": {
       "type": "power",
-      "name": "spencer_last_breath",
-      "displayName": "Spencer's Last Breath"
+      "name": "spencer_last_breath"
     },
     "triggers": [
       "DBD_SlasherChainAttack",
@@ -63,16 +55,200 @@
   {
     "character": {
       "type": "killer",
-      "name": "shape",
-      "displayName": "The Shape"
+      "name": "shape"
     },
     "action": {
       "type": "power",
-      "name": "evil_within",
-      "displayName": "Evil Within"
+      "name": "evil_within"
     },
     "triggers": [
-      "DBD_SlasherTierIncrement"
+      "DBD_SlasherTierIncrement",
+      "DBD_SlasherPowerKillAllCampers"
+    ]
+  },
+  {
+    "character": {
+      "type": "killer",
+      "name": "hag"
+    },
+    "action": {
+      "type": "power",
+      "name": "blackened_catalyst"
+    },
+    "triggers": [
+      "DBD_DLC3_Slasher_Stat1",
+      "DBD_DLC3_Slasher_Stat2"
+    ]
+  },
+  {
+    "character": {
+      "type": "killer",
+      "name": "doctor"
+    },
+    "action": {
+      "type": "power",
+      "name": "carter_spark"
+    },
+    "triggers": [
+      "DBD_DLC4_Slasher_Stat1",
+      "DBD_DLC4_Slasher_Stat2"
+    ]
+  },
+  {
+    "character": {
+      "type": "killer",
+      "name": "huntress"
+    },
+    "action": {
+      "type": "power",
+      "name": "hunting_hatchets"
+    },
+    "triggers": [
+      "DBD_DLC5_Slasher_Stat1",
+      "DBD_DLC5_Slasher_Stat2"
+    ]
+  },
+  {
+    "character": {
+      "type": "killer",
+      "name": "cannibal"
+    },
+    "action": {
+      "type": "power",
+      "name": "bubba_chainsaw"
+    },
+    "triggers": [
+      "DBD_DLC6_Slasher_Stat1"
+    ]
+  },
+  {
+    "character": {
+      "type": "killer",
+      "name": "nightmare"
+    },
+    "action": {
+      "type": "power",
+      "name": "dream_master"
+    },
+    "triggers": [
+      "DBD_DLC7_Slasher_Stat1"
+    ]
+  },
+  {
+    "character": {
+      "type": "killer",
+      "name": "pig"
+    },
+    "action": {
+      "type": "power",
+      "name": "reverse_bear_trap"
+    },
+    "triggers": [
+      "DBD_DLC8_Slasher_Stat1"
+    ]
+  },
+  {
+    "character": {
+      "type": "killer",
+      "name": "clown"
+    },
+    "action": {
+      "type": "power",
+      "name": "the_afterpiece_tonic"
+    },
+    "triggers": [
+      "DBD_DLC9_Slasher_Stat2"
+    ]
+  },
+  {
+    "character": {
+      "type": "killer",
+      "name": "spirit"
+    },
+    "action": {
+      "type": "power",
+      "name": "yamaoka_haunting"
+    },
+    "triggers": [
+      "DBD_Chapter9_Slasher_Stat2"
+    ]
+  },
+  {
+    "character": {
+      "type": "killer",
+      "name": "legion"
+    },
+    "action": {
+      "type": "power",
+      "name": "feral_frenzy"
+    },
+    "triggers": [
+      "DBD_Chapter10_Slasher_Stat2"
+    ]
+  },
+  {
+    "character": {
+      "type": "killer",
+      "name": "plague"
+    },
+    "action": {
+      "type": "power",
+      "name": "vile_purge"
+    },
+    "triggers": [
+      "DBD_Chapter11_Slasher_Stat2"
+    ]
+  },
+  {
+    "character": {
+      "type": "killer",
+      "name": "ghostface"
+    },
+    "action": {
+      "type": "power",
+      "name": "night_shroud"
+    },
+    "triggers": [
+      "DBD_Chapter12_Slasher_Stat2"
+    ]
+  },
+  {
+    "character": {
+      "type": "killer",
+      "name": "demogorgon"
+    },
+    "action": {
+      "type": "power",
+      "name": "of_the_abyss"
+    },
+    "triggers": [
+      "DBD_Chapter13_Slasher_Stat2"
+    ]
+  },
+  {
+    "character": {
+      "type": "killer",
+      "name": "oni"
+    },
+    "action": {
+      "type": "power",
+      "name": "yamaokas_wrath"
+    },
+    "triggers": [
+      "DBD_Chapter14_Slasher_Stat2"
+    ]
+  },
+  {
+    "character": {
+      "type": "killer",
+      "name": "deathslinger"
+    },
+    "action": {
+      "type": "power",
+      "name": "the_redeemer"
+    },
+    "triggers": [
+      "DBD_Chapter15_Slasher_Stat1"
     ]
   }
 ]

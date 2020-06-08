@@ -25,6 +25,7 @@ namespace Surveillance.Client
             
                 var activeUser = SteamClient.ActiveUser;
                 Environment.SetEnvironmentVariable(SteamId, activeUser.ToString(NumberFormatInfo.InvariantInfo));
+                
             }
 
             var app = new SurveillanceApp(
