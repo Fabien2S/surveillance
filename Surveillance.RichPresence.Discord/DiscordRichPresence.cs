@@ -1,4 +1,6 @@
-﻿using DiscordGameSDK;
+﻿using System;
+using System.Threading.Tasks;
+using DiscordGameSDK;
 using Surveillance.App;
 
 namespace Surveillance.RichPresence.Discord
@@ -11,9 +13,21 @@ namespace Surveillance.RichPresence.Discord
 
         private DiscordGameSDK.Discord _discord;
 
-        public void Init(ISurveillanceApp app)
+        public Task Init(ISurveillanceApp app)
         {
             _discord = new DiscordGameSDK.Discord(ClientId, (ulong) CreateFlags.NoRequireDiscord);
+
+            var completionSource = new TaskCompletionSource<bool>();
+            var userManager = _discord.GetUserManager();
+
+            void HandleUserUpdate()
+            {
+                userManager.OnCurrentUserUpdate -= HandleUserUpdate;
+                completionSource.SetResult(true);
+            }
+
+            userManager.OnCurrentUserUpdate += HandleUserUpdate;
+            return completionSource.Task;
         }
 
         public void PollEvents()
@@ -21,22 +35,30 @@ namespace Surveillance.RichPresence.Discord
             _discord.RunCallbacks();
         }
 
-        public void UpdateActivity(GameState gameState)
+        public void UpdateGameState(GameState gameState)
         {
+            var gameCharacter = gameState.Character;
+            var gameAction = gameState.Action;
+
             var activityManager = _discord.GetActivityManager();
             activityManager.UpdateActivity(new Activity
             {
                 Instance = true,
                 Name = "Surveillance",
+                Details = "Playing As " + gameCharacter.Type,
+                State = gameState.Details,
                 Type = ActivityType.Watching,
                 Assets = new ActivityAssets
                 {
-                    LargeText = gameState.Character,
-                    LargeImage = gameState.CharacterIcon,
-                    SmallText = gameState.Action,
-                    SmallImage = gameState.ActionIcon
+                    LargeText = gameCharacter.Name,
+                    LargeImage = "character_" + gameCharacter.Type + "_" + gameCharacter.Name,
+                    SmallText = gameAction.Name,
+                    SmallImage = "action_" + gameAction.Type + "_" + gameAction.Name
                 }
-            }, result => { });
+            }, result =>
+            {
+                Console.WriteLine(result);
+            });
         }
 
         public void Dispose()

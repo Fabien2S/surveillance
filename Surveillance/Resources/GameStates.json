@@ -1,0 +1,58 @@
+﻿[
+  {
+    "character": {
+      "type": "killer",
+      "name": "trapper"
+    },
+    "action": {
+      "type": "power",
+      "name": "bear_trap"
+    },
+    "triggers": [
+      "DBD_TrapPickup"
+    ]
+  },
+  {
+    "character": {
+      "type": "killer",
+      "name": "wraith"
+    },
+    "action": {
+      "type": "power",
+      "name": "wailing_bell"
+    },
+    "details": "{DBD_UncloakAttack} surprise attacks",
+    "triggers": [
+      "DBD_UncloakAttack"
+    ]
+  },
+  {
+    "character": {
+      "type": "killer",
+      "name": "hillbilly"
+    },
+    "action": {
+      "type": "power",
+      "name": "chainsaw"
+    },
+    "details": "{DBD_ChainsawHit} survivors chainsawed",
+    "triggers": [
+      "DBD_ChainsawHit"
+    ]
+  },
+  {
+    "character": {
+      "type": "killer",
+      "name": "nurse"
+    },
+    "action": {
+      "type": "power",
+      "name": "spencer_last_breath"
+    },
+    "details": "{DBD_SlasherChainAttack} blink attacks",
+    "triggers": [
+      "DBD_SlasherChainAttack",
+      "DBD_SlasherChainInterruptAfter3"
+    ]
+  }
+]

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Surveillance.App;
 
@@ -14,7 +15,7 @@ namespace Surveillance.RichPresence.Tray
         private TrayIcon _icon;
 
 
-        public void Init(ISurveillanceApp app)
+        public Task Init(ISurveillanceApp app)
         {
             _app = app;
 
@@ -25,6 +26,8 @@ namespace Surveillance.RichPresence.Tray
                 CurrentCulture = CultureInfo.InvariantCulture,
                 CurrentUICulture = CultureInfo.InvariantCulture
             }.Start();
+
+            return Task.CompletedTask;
         }
 
         private void Run()
@@ -49,10 +52,12 @@ namespace Surveillance.RichPresence.Tray
         {
         }
 
-        public void UpdateActivity(GameState gameState)
+        public void UpdateGameState(GameState gameState)
         {
-            _icon.SetText($"{gameState.Character} - {gameState.Action}");
-            _icon.SetIcon(gameState.CharacterIcon);
+            var gameCharacter = gameState.Character;
+            var gameAction = gameState.Action;
+            _icon.SetText(gameCharacter.Name + " (" + gameAction.Name + ")");
+            _icon.SetIcon("character." + gameCharacter.Type + "." + gameCharacter.Name);
         }
 
         public void Dispose()

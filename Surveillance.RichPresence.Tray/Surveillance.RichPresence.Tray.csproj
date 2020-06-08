@@ -14,7 +14,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Resources" />
+      <Folder Include="Resources\character\killer" />
     </ItemGroup>
 
 </Project>

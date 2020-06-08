@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Surveillance.App;
 
 namespace Surveillance.RichPresence
@@ -7,9 +8,9 @@ namespace Surveillance.RichPresence
     {
         int UpdateRate { get; }
 
-        void Init(ISurveillanceApp app);
+        Task Init(ISurveillanceApp app);
         void PollEvents();
 
-        void UpdateActivity(GameState gameState);
+        void UpdateGameState(GameState gameState);
     }
 }

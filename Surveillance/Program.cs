@@ -1,4 +1,8 @@
-﻿using Surveillance.RichPresence.Discord;
+﻿using System.Text.Json;
+using Surveillance.App;
+using Surveillance.App.Json;
+using Surveillance.RichPresence;
+using Surveillance.RichPresence.Discord;
 using Surveillance.RichPresence.Tray;
 
 namespace Surveillance
@@ -7,9 +11,18 @@ namespace Surveillance
     {
         private static void Main()
         {
+            var type = typeof(SurveillanceApp);
+            var path = type.Namespace + ".Resources.GameStates.json";
+            var resourceStream = type.Assembly.GetManifestResourceStream(path);
+            var gameStates = JsonSerializer.DeserializeAsync<GameState[]>(resourceStream, DefaultJsonOptions.Instance).Result;
+
             var app = new SurveillanceApp(
-                new TrayRichPresence(),
-                new DiscordRichPresence()
+                gameStates,
+                new IRichPresence[]
+                {
+                    new TrayRichPresence(),
+                    new DiscordRichPresence(), 
+                }
             );
             app.Run();
         }

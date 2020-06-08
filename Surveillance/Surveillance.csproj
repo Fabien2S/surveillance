@@ -12,6 +12,10 @@
     </ItemGroup>
 
     <ItemGroup>
+        <EmbeddedResource Include="Resources\GameStates.json" />
+    </ItemGroup>
+    
+    <ItemGroup>
       <ProjectReference Include="..\Surveillance.App\Surveillance.App.csproj" />
       <ProjectReference Include="..\Surveillance.RichPresence.Discord\Surveillance.RichPresence.Discord.csproj" />
       <ProjectReference Include="..\Surveillance.RichPresence.Tray\Surveillance.RichPresence.Tray.csproj" />

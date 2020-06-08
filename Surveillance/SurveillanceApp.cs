@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Threading;
@@ -9,6 +10,7 @@ using Surveillance.App;
 using Surveillance.App.Json;
 using Surveillance.RichPresence;
 using Surveillance.Steam;
+using Surveillance.Steam.Models;
 using Surveillance.Steam.Response;
 
 namespace Surveillance
@@ -16,9 +18,11 @@ namespace Surveillance
     public class SurveillanceApp : ISurveillanceApp
     {
         private const uint DeadByDaylightAppId = 381210;
-        
+        private const int UpdateInterval = 1_000;
+
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-        
+
+        private readonly GameState[] _gameStates;
         private readonly IRichPresence[] _richPresences;
         private readonly int _updateRate;
 
@@ -26,9 +30,11 @@ namespace Surveillance
 
         private bool _dirty;
         private GameState _gameState;
+        private SteamGameStatModel[] _gameStats;
 
-        public SurveillanceApp(params IRichPresence[] richPresences)
+        public SurveillanceApp(GameState[] gameStates, IRichPresence[] richPresences)
         {
+            _gameStates = gameStates;
             _richPresences = richPresences;
             _updateRate = richPresences.Select(rp => rp.UpdateRate).Max();
         }
@@ -39,44 +45,16 @@ namespace Surveillance
 
             _running = true;
 
-            try
-            {
-                foreach (var richPresence in _richPresences)
-                    richPresence.Init(this);
-            }
-            catch (Exception e)
-            {
-                Logger.Error("Unable to initialize Rich Presence");
-                Logger.Error(e);
-                return;
-            }
-            
-            RequestStatistics();
+            RunRichPresenceLoop();
+            RunStatsRequestLoop();
 
-            foreach (var richPresence in _richPresences)
-            {
-                richPresence.UpdateActivity(new GameState
-                {
-                    Action = "test",
-                    ActionIcon = "app",
-                    Character = "app",
-                    CharacterIcon = "app"
-                });
-            }
-            
             try
             {
                 while (_running)
                 {
                     foreach (var richPresence in _richPresences)
-                    {
                         richPresence.PollEvents();
-                        if (_dirty)
-                            richPresence.UpdateActivity(_gameState);
-                    }
-
-                    _dirty = false;
-                    Thread.Sleep(_updateRate);
+                    Thread.Sleep(UpdateInterval);
                 }
             }
             catch (Exception e)
@@ -84,38 +62,123 @@ namespace Surveillance
                 Logger.Error(e);
             }
 
-            foreach (var richPresence in _richPresences)
-                richPresence.Dispose();
-
             Logger.Info("Shutting down");
         }
 
-        private async void RequestStatistics()
+        private async void RunRichPresenceLoop()
+        {
+            foreach (var richPresence in _richPresences)
+                await richPresence.Init(this);
+
+            while (_running)
+            {
+                if (!_dirty)
+                    continue;
+                
+                foreach (var richPresence in _richPresences)
+                    richPresence.UpdateGameState(_gameState);
+
+                _dirty = false;
+                await Task.Delay(_updateRate);
+            }
+            
+            foreach (var richPresence in _richPresences)
+                richPresence.Dispose();
+        }
+
+        private async void RunStatsRequestLoop()
         {
             var steamKey = Environment.GetEnvironmentVariable("STEAM_KEY");
             SteamApi.Init(steamKey);
-            
+
             var requestUri = BuildUri();
 
             while (_running)
             {
-                var apiResponse = await SteamApi.Request<SteamUserStatsForGameResponse>(requestUri, DefaultJsonOptions.Instance);
+                var apiResponse =
+                    await SteamApi.Request<SteamUserStatsForGameResponse>(requestUri, DefaultJsonOptions.Instance);
                 var apiResponseContent = apiResponse.Content;
                 var playerStats = apiResponseContent.PlayerStats;
-                
+
                 Logger.Info("Received stats of player {0} for {1}", playerStats.SteamId, playerStats.GameName);
 
-                var gameStats = playerStats.Stats;
-                foreach (var statModel in gameStats)
-                    Logger.Debug("{0} = {1}", statModel.Name, statModel.Value);
+                UpdateGameState(playerStats.Stats);
+
+                var res = new SteamGameStatModel[_gameStats.Length];
+                Array.Copy(_gameStats, res, _gameStats.Length);
+                res[22] = new SteamGameStatModel
+                {
+                    Name = "DBD_UncloakAttack",
+                    Value = 128755
+                };
+                UpdateGameState(res);
 
                 var utcNow = DateTimeOffset.UtcNow;
                 var offset = apiResponse.Expires.Subtract(utcNow);
                 Logger.Trace("Next steam request in {0} (now: {1}, expires: {2})", offset, utcNow, apiResponse.Expires);
                 await Task.Delay(offset);
             }
-            
+
             SteamApi.Reset();
+        }
+
+        private void UpdateGameState(SteamGameStatModel[] stats)
+        {
+            if (_gameStats == null)
+            {
+                for (var i = 0; i < stats.Length; i++)
+                {
+                    var stat = stats[i];
+                    Logger.Debug("[{0}] {1} = {2}", i, stat.Name, stat.Value);
+                }
+
+                Logger.Debug("Ignoring first game stats response");
+                _gameStats = stats;
+                return;
+            }
+
+            for (var i = 0; i < stats.Length; i++)
+            {
+                var stat = stats[i];
+                var oldStat = _gameStats[i];
+                Debug.Assert(
+                    stat.Name.Equals(oldStat.Name, StringComparison.Ordinal),
+                    "stat[i].Name != oldStat[i].Name"
+                );
+
+                if (Math.Abs(stat.Value - oldStat.Value) <= 0)
+                    continue;
+
+                Logger.Trace("Checking stat {0}", stat.Name);
+                if (!FindGameState(stat.Name, out var definition))
+                    continue;
+
+                SetGameState(definition);
+                break;
+            }
+
+            _gameStats = stats;
+        }
+
+        private bool FindGameState(string name, out GameState gameState)
+        {
+            foreach (var state in _gameStates)
+            {
+                if (!state.Triggers.Any(trigger => trigger.Equals(name, StringComparison.Ordinal)))
+                    continue;
+
+                gameState = state;
+                return true;
+            }
+
+            gameState = default;
+            return false;
+        }
+
+        private void SetGameState(GameState gameState)
+        {
+            _dirty = true;
+            _gameState = gameState;
         }
 
         private static Uri BuildUri()
@@ -123,7 +186,8 @@ namespace Surveillance
             var builder = new UriBuilder("https://api.steampowered.com/ISteamUserStats/GetUserStatsForGame/v2/");
 
             var queryCollection = HttpUtility.ParseQueryString(builder.Query);
-            queryCollection["key"] = Environment.GetEnvironmentVariable("STEAM_KEY") ?? throw new ArgumentException("Missing STEAM_KEY environment variable");
+            queryCollection["key"] = Environment.GetEnvironmentVariable("STEAM_KEY") ??
+                                     throw new ArgumentException("Missing STEAM_KEY environment variable");
             queryCollection["appid"] = DeadByDaylightAppId.ToString(NumberFormatInfo.InvariantInfo);
             queryCollection["steamid"] = "76561198135169007";
             builder.Query = queryCollection.ToString() ?? throw new InvalidOperationException();
