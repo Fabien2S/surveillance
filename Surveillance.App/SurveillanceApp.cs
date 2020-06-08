@@ -121,15 +121,6 @@ namespace Surveillance.App
                 Logger.Info("Received stats of player {0} for {1}", playerStats.SteamId, playerStats.GameName);
 
                 UpdateGameState(playerStats.Stats);
-                
-                var res = new SteamGameStatModel[playerStats.Stats.Length];
-                Array.Copy(playerStats.Stats, res, playerStats.Stats.Length);
-                res[22] = new SteamGameStatModel
-                {
-                    Name = "DBD_UncloakAttack",
-                    Value = 128755
-                };
-                UpdateGameState(res);
 
                 var utcNow = DateTimeOffset.UtcNow;
                 var offset = apiResponse.Expires.Subtract(utcNow);
