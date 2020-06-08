@@ -44,10 +44,9 @@ namespace Surveillance.RichPresence.Discord
             activityManager.UpdateActivity(new Activity
             {
                 Instance = true,
-                Name = "Dead by Daylight",
-                Details = gameState.CharacterString,
-                State = gameState.ActionString,
-                Type = ActivityType.Watching,
+                Type = ActivityType.Playing,
+                Details = gameState.Details,
+                State = gameState.State,
                 Assets = new ActivityAssets
                 {
                     LargeText = gameCharacter.DisplayName,

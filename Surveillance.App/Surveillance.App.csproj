@@ -16,8 +16,4 @@
         <EmbeddedResource Include="Resources\**" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Content Include="Resources\Strings.fr-FR.txt" />
-    </ItemGroup>
-
 </Project>

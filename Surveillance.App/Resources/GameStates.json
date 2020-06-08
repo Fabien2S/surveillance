@@ -59,5 +59,20 @@
       "DBD_SlasherChainAttack",
       "DBD_SlasherChainInterruptAfter3"
     ]
+  },
+  {
+    "character": {
+      "type": "killer",
+      "name": "shape",
+      "displayName": "The Shape"
+    },
+    "action": {
+      "type": "power",
+      "name": "evil_within",
+      "displayName": "Evil Within"
+    },
+    "triggers": [
+      "DBD_SlasherTierIncrement"
+    ]
   }
 ]
