@@ -53,18 +53,11 @@ namespace Surveillance.App
             RunRichPresenceLoop();
             RunStatsRequestLoop();
 
-            try
+            while (_running)
             {
-                while (_running)
-                {
-                    foreach (var richPresence in _richPresences)
-                        richPresence.PollEvents();
-                    Thread.Sleep(UpdateInterval);
-                }
-            }
-            catch (Exception e)
-            {
-                Logger.Error(e);
+                foreach (var richPresence in _richPresences)
+                    richPresence.PollEvents();
+                Thread.Sleep(UpdateInterval);
             }
 
             Logger.Info("Shutting down");
