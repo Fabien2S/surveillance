@@ -6,7 +6,7 @@ namespace Surveillance.Client.Steam
 {
     public static class SteamClient
     {
-        public static ulong ActiveUser => (ulong) (GetValue("ActiveProcess", "ActiveUser", 0) | 76561197960265728L);
+        public static ulong ActiveUser => (ulong) ((long) GetValue("ActiveProcess", "ActiveUser", 0) | 76561197960265728L);
         public static bool IsConnected => (uint) GetValue("ActiveProcess", "ActiveUser", 0) != 0;
         public static bool IsLaunched => GetValue("ActiveProcess", "pid", 0) != 0;
 
