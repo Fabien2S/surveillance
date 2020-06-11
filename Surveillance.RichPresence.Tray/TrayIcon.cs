@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Drawing;
 using System.IO;
-using System.Threading;
 using System.Windows.Forms;
 
 namespace Surveillance.RichPresence.Tray
@@ -47,6 +46,7 @@ namespace Surveillance.RichPresence.Tray
 
         public void Dispose()
         {
+            _icon.Visible = false;
             _icon.Dispose();
         }
 
