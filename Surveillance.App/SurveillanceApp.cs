@@ -22,8 +22,9 @@ namespace Surveillance.App
         private const int UpdateInterval = 1_000;
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-
         
+        public GameState[] GameStates { get; private set; }
+
         private readonly Dictionary<string, GameState> _gameStates = new Dictionary<string, GameState>();
         private readonly Dictionary<string, double> _stats = new Dictionary<string, double>();
         
@@ -70,9 +71,24 @@ namespace Surveillance.App
             var type = typeof(SurveillanceApp);
             var path = type.Namespace + ".Resources.GameStates.json";
             var resourceStream = type.Assembly.GetManifestResourceStream(path);
-            var gameStates = await JsonSerializer.DeserializeAsync<GameState[]>(resourceStream, DefaultJsonOptions.Instance);
+            GameStates = await JsonSerializer.DeserializeAsync<GameState[]>(resourceStream, DefaultJsonOptions.Instance);
             
-            foreach (var gameState in gameStates)
+            for (var i = 0; i < GameStates.Length; i++)
+            {
+                var gameState = GameStates[i];
+
+                var character = gameState.Character;
+                character.DisplayName = I18N("character." + character.Type + "." + character.Name);
+                gameState.Character = character;
+
+                var action = gameState.Action;
+                action.DisplayName = I18N("action." + action.Type + "." + action.Name);
+                gameState.Action = action;
+
+                GameStates[i] = gameState;
+            }
+            
+            foreach (var gameState in GameStates)
             foreach (var trigger in gameState.Triggers)
             {
                 Logger.Debug("Registering trigger \"{0}\" for \"{1}\"", trigger, gameState);
@@ -158,23 +174,19 @@ namespace Surveillance.App
                 SetGameState(newState.Value);
         }
 
-        private void SetGameState(GameState gameState)
+        public void SetGameState(GameState gameState)
         {
             Logger.Info("Updating game state to {0}", gameState);
             
             _gameState = gameState;
 
             var gameCharacter = gameState.Character;
-            gameCharacter.DisplayName = I18N("character." + gameCharacter.Type + "." + gameCharacter.Name);
-            _gameState.Character = gameCharacter;
-
-            var gameAction = gameState.Action;
-            gameAction.DisplayName = I18N("action." + gameAction.Type + "." + gameAction.Name);
-            _gameState.Action = gameAction;
+            var role = I18N("character.role." + gameCharacter.Type);
+            _gameState.State = I18N("character.role.playing_as", role);
             
-            var values = gameState.Triggers.Select(trigger => _stats[trigger]).Cast<object>().ToArray();
+            var gameAction = gameState.Action;
+            var values = gameState.Triggers.Select(trigger => Math.Floor(_stats[trigger])).Cast<object>().ToArray();
             _gameState.Details = I18N("action." + gameAction.Type + "." + gameAction.Name + ".details", values);
-            _gameState.State = I18N("character.state." + gameCharacter.Type);
             
             _dirty = true;
         }
@@ -192,7 +204,7 @@ namespace Surveillance.App
             return builder.Uri;
         }
 
-        private string I18N(string key, params object[] args)
+        public string I18N(string key, params object[] args)
         {
             return string.Format(_resourceManager.GetString(key) ?? key, args);
         }

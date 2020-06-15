@@ -1,5 +1,10 @@
-﻿character.state.killer=Playing as Killer
-character.state.survivor=Playing as Survivor
+﻿app.select_state=Select Role
+app.clear_state=Clear Role
+app.close=Close
+
+character.role.playing_as=Playing as {0}
+character.role.killer=Killer
+character.role.survivor=Survivor
 
 character.survivor.generic=Survivor
 character.killer.trapper=The Trapper
@@ -22,7 +27,13 @@ character.killer.demogorgon=The Demogorgon
 character.killer.oni=The Oni
 character.killer.deathslinger=The Deathslinger
 
-action.status.surviving=Surviving
+action.survivor.skill_checks=Wandering around
+action.survivor.skill_checks.details={0} successful skill checks
+action.survivor.repairing=Repairing
+action.survivor.repairing.details={0} generators repaired
+action.survivor.healing=Healing
+action.survivor.healing.details={0} survivors healed
+
 action.power.bear_trap=Bear Trap
 action.power.bear_trap.details={0} Bear Trap catches
 action.power.wailing_bell=Wailing Bell

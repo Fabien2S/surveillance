@@ -19,10 +19,16 @@ namespace Surveillance.RichPresence.Tray
             };
         }
 
-        public ToolStripMenuItem AddItem(string text, EventHandler click)
+        public ToolStripMenuItem AddItem(string text)
         {
             var menuItem = new ToolStripMenuItem(text);
-            menuItem.Click += click;
+            _icon.ContextMenuStrip.Items.Add(menuItem);
+            return menuItem;
+        }
+
+        public ToolStripMenuItem AddItem(string text, EventHandler click)
+        {
+            var menuItem = CreateItem(text, click);
             _icon.ContextMenuStrip.Items.Add(menuItem);
             return menuItem;
         }
@@ -44,7 +50,6 @@ namespace Surveillance.RichPresence.Tray
             }
         }
 
-
         public void Dispose()
         {
             _icon.Visible = false;
@@ -57,6 +62,13 @@ namespace Surveillance.RichPresence.Tray
             var path = type.Namespace + ".Resources." + name;
             var resourceStream = type.Assembly.GetManifestResourceStream(path);
             return resourceStream;
+        }
+        
+        public static ToolStripMenuItem CreateItem(string text, EventHandler click)
+        {
+            var menuItem = new ToolStripMenuItem(text);
+            menuItem.Click += click;
+            return menuItem;
         }
     }
 }

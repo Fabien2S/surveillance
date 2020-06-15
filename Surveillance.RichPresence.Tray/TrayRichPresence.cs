@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Threading;
 using System.Threading.Tasks;
@@ -12,9 +13,11 @@ namespace Surveillance.RichPresence.Tray
     {
         public int UpdateRate => 0;
 
+        private readonly Dictionary<string, ToolStripMenuItem> _stateItem = new Dictionary<string, ToolStripMenuItem>();
+        private ToolStripMenuItem _activeStateItem;
+        
         private SurveillanceApp _app;
         private TrayIcon _icon;
-
 
         public Task Init(SurveillanceApp app)
         {
@@ -39,9 +42,47 @@ namespace Surveillance.RichPresence.Tray
             _icon = new TrayIcon();
             _icon.SetText("Surveillance");
             _icon.SetIcon("app");
-            _icon.AddItem("Close", HandleCloseButton);
+
+            BuildGameStateItem();
+
+            var closeItem = _icon.AddItem("Close", HandleCloseButton);
+            closeItem.Text = _app.I18N("app.close");
 
             Application.Run();
+        }
+
+        private void BuildGameStateItem()
+        {
+            var stateItem = _icon.AddItem("game_states");
+            stateItem.Text = _app.I18N("app.select_state");
+
+            var categoryItems = new Dictionary<string, ToolStripMenuItem>();
+            foreach (var gameState in _app.GameStates)
+            {
+                var character = gameState.Character;
+                var category = character.Type;
+
+                if (!categoryItems.TryGetValue(category, out var categoryItem))
+                {
+                    categoryItem = new ToolStripMenuItem(category)
+                    {
+                        Text = _app.I18N("character.role." + character.Type)
+                    };
+
+                    stateItem.DropDownItems.Add(categoryItem);
+                    categoryItems[category] = categoryItem;
+                }
+
+                var path = StateToPath(gameState);
+                var item = new ToolStripMenuItem(path)
+                {
+                    Text = character.DisplayName + " (" + gameState.Action.DisplayName + ")"
+                };
+                item.Click += (sender, args) => _app.SetGameState(gameState);
+
+                categoryItem.DropDownItems.Add(item);
+                _stateItem[path] = item;
+            }
         }
 
         private void HandleCloseButton(object sender, EventArgs e)
@@ -55,16 +96,35 @@ namespace Surveillance.RichPresence.Tray
 
         public void UpdateGameState(GameState gameState)
         {
-            _icon.SetText(gameState.State + " (" + gameState.Details + ")");
-            
-            var gameCharacter = gameState.Character;
-            _icon.SetIcon("character." + gameCharacter.Type + "." + gameCharacter.Name);
+            var character = gameState.Character;
+            _icon.SetText(character.DisplayName + " (" + gameState.Details + ")");
+
+            _icon.SetIcon("character." + character.Type + "." + character.Name);
+
+            if (_activeStateItem != null)
+            {
+                _activeStateItem.Checked = false;
+                _activeStateItem = null;
+            }
+
+            var path = StateToPath(gameState);
+            if (!_stateItem.TryGetValue(path, out var btn))
+                return;
+            btn.Checked = true;
+            _activeStateItem = btn;
         }
 
         public void Dispose()
         {
             _icon.Dispose();
             Application.Exit();
+        }
+
+        private static string StateToPath(GameState state)
+        {
+            var character = state.Character;
+            var action = state.Action;
+            return character.Type + "." + character.Name + "." + action.Type + "." + action.Name;
         }
     }
 }
