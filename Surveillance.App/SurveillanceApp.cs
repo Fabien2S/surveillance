@@ -74,7 +74,10 @@ namespace Surveillance.App
             
             foreach (var gameState in gameStates)
             foreach (var trigger in gameState.Triggers)
+            {
+                Logger.Debug("Registering trigger \"{0}\" for \"{1}\"", trigger, gameState);
                 _gameStates[trigger] = gameState;
+            }
         }
         
         private async void RunRichPresenceLoop()
@@ -87,6 +90,7 @@ namespace Surveillance.App
                 if (!_dirty)
                     continue;
 
+                Logger.Debug("Dispatching update to rich presence (state: {0})", _gameState);
                 foreach (var richPresence in _richPresences)
                     richPresence.UpdateGameState(_gameState);
 
@@ -135,14 +139,19 @@ namespace Surveillance.App
 
                 if (_stats.TryGetValue(statName, out var oldStat))
                 {
+                    Logger.Trace("Comparing trigger \"{0}\" (current: {1}, new: {2}) for {3}", statName, oldStat, stat.Value, gameState);
                     if (Math.Abs(oldStat - stat.Value) <= 0)
                         continue;
 
+                    Logger.Trace("Updating trigger value: {0}", stat.Value);
                     newState = gameState;
                     _stats[statName] = stat.Value;
                 }
                 else
+                {
+                    Logger.Trace("Registering initial value: {0}", stat.Value);
                     _stats[statName] = stat.Value;
+                }
             }
             
             if(newState.HasValue)
@@ -151,6 +160,8 @@ namespace Surveillance.App
 
         private void SetGameState(GameState gameState)
         {
+            Logger.Info("Updating game state to {0}", gameState);
+            
             _gameState = gameState;
 
             var gameCharacter = gameState.Character;
@@ -183,8 +194,7 @@ namespace Surveillance.App
 
         private string I18N(string key, params object[] args)
         {
-            var str = _resourceManager.GetString(key) ?? throw new KeyNotFoundException("Missing " + key);
-            return args.Length == 0 ? str : string.Format(str, args);
+            return string.Format(_resourceManager.GetString(key) ?? key, args);
         }
 
         public void Close()
