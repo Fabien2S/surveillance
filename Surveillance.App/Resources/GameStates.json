@@ -254,7 +254,7 @@
   {
     "character": {
       "type": "survivor",
-      "name": "unknown"
+      "name": "generic"
     },
     "action": {
       "type": "status",

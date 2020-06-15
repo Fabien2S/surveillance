@@ -1,7 +1,7 @@
-﻿character.state.killer=Playing as Killer
+﻿﻿character.state.killer=Playing as Killer
 character.state.survivor=Playing as Survivor
 
-character.survivor.unknown=Survivor
+character.survivor.generic=Survivor
 character.killer.trapper=The Trapper
 character.killer.wraith=The Wraith
 character.killer.hillbilly=The Hillbilly
