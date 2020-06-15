@@ -12,7 +12,7 @@ namespace Surveillance.Client
     {
         private const string SteamId = "STEAM_ID";
         
-        private static void Main()
+        private static void Main(string[] args)
         {
             if (Environment.GetEnvironmentVariable(SteamId) == null)
             {
@@ -25,6 +25,13 @@ namespace Surveillance.Client
             
                 var activeUser = SteamClient.ActiveUser;
                 Environment.SetEnvironmentVariable(SteamId, activeUser.ToString(NumberFormatInfo.InvariantInfo));
+            }
+
+            if (Environment.GetEnvironmentVariable("STEAM_KEY") == null)
+            {
+                if(args.Length < 1)
+                    throw new ArgumentOutOfRangeException(nameof(args), "Missing STEAM_KEY argument");
+                Environment.SetEnvironmentVariable("STEAM_KEY", args[0]);
             }
 
             var app = new SurveillanceApp(

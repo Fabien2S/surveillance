@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
+using Surveillance.App;
 
 namespace Surveillance.RichPresence.Tray
 {
@@ -52,7 +53,7 @@ namespace Surveillance.RichPresence.Tray
 
         private static Stream LoadResource(string name)
         {
-            var type = typeof(TrayRichPresence);
+            var type = typeof(SurveillanceApp);
             var path = type.Namespace + ".Resources." + name;
             var resourceStream = type.Assembly.GetManifestResourceStream(path);
             return resourceStream;
