@@ -1,4 +1,4 @@
-﻿﻿character.state.killer=Playing as Killer
+﻿character.state.killer=Playing as Killer
 character.state.survivor=Playing as Survivor
 
 character.survivor.generic=Survivor
