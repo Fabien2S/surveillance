@@ -26,6 +26,7 @@ character.killer.ghostface=The Ghostface
 character.killer.demogorgon=The Demogorgon
 character.killer.oni=The Oni
 character.killer.deathslinger=The Deathslinger
+character.killer.executioner=The Executioner
 
 action.survivor.skill_checks=Wandering around
 action.survivor.skill_checks.details={0} successful skill checks
@@ -72,3 +73,5 @@ action.power.yamaokas_wrath=Yamaoka's Wrath
 action.power.yamaokas_wrath.details={0} survivors smashed
 action.power.the_redeemer=The Redeemer
 action.power.the_redeemer.details={0} speared survivors down
+action.power.rites_of_judgment=Rites Of Judgment
+action.power.rites_of_judgment.details={0} ensnared survivors in Cages of Atonement

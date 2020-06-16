@@ -253,6 +253,19 @@
   },
   {
     "character": {
+      "type": "killer",
+      "name": "executioner"
+    },
+    "action": {
+      "type": "power",
+      "name": "rites_of_judgement"
+    },
+    "triggers": [
+      "DBD_Chapter16_Slasher_Stat1"
+    ]
+  },
+  {
+    "character": {
       "type": "survivor",
       "name": "generic"
     },

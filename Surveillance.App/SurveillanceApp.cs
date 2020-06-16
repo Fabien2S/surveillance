@@ -185,8 +185,12 @@ namespace Surveillance.App
             _gameState.State = I18N("character.role.playing_as", role);
             
             var gameAction = gameState.Action;
-            var values = gameState.Triggers.Select(trigger => Math.Floor(_stats[trigger])).Cast<object>().ToArray();
-            _gameState.Details = I18N("action." + gameAction.Type + "." + gameAction.Name + ".details", values);
+            var triggers = gameState.Triggers;
+            var triggerCount = triggers.Length;
+            var stats = new object[triggerCount];
+            for (var i = 0; i < triggerCount; i++)
+                stats[i] = _stats.TryGetValue(triggers[i], out var s) ? Math.Floor(s) : 0;
+            _gameState.Details = I18N("action." + gameAction.Type + "." + gameAction.Name + ".details", stats);
             
             _dirty = true;
         }
