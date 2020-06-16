@@ -258,7 +258,7 @@
     },
     "action": {
       "type": "power",
-      "name": "rites_of_judgement"
+      "name": "rites_of_judgment"
     },
     "triggers": [
       "DBD_Chapter16_Slasher_Stat1"
